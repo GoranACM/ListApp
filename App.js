@@ -27,30 +27,34 @@ export default class App extends Component {
   render() {
     return (
       <SafeAreaView>
-      <View style={styles.main}>
-        <Text>Add your expense</Text>
-          <TextInput style={ styles.input }
-            placeholder= "$ amount" 
-            placeholderTextColor= 'red'
-            onChangeText={
-              text => this.setState({ expenseAmount: parseFloat(text) })
-            }
-            keyboardType="number-pad"
-          />      
-          {/* <TextInput style={ styles.input }
-            placeholder= "category" 
-            placeholderTextColor= 'red'
-            onChangeText={
-              text => this.setState({ expenseCategory: text })
-            }
-          /> */}
-          <RNPickerSelect
-            items = { this.dropdownItems }
-            value = { this.state.expenseCategory }
-            onValueChange = { value => this.setState({ expenseCategory: value }) }
-            useNativeAndroidPickerStyle = { false }
-           />
-      </View>
+        <View style={styles.main}>
+          <Text>Add your expense</Text>
+            <TextInput 
+              style={ styles.input }
+              placeholder= "$ amount" 
+              placeholderTextColor= 'red'
+              onChangeText={
+                text => this.setState({ expenseAmount: parseFloat(text) })
+              }
+              keyboardType="number-pad"
+              ref = { (input) => ( this._textInput = input )}
+            />      
+            {/* <TextInput style={ styles.input }
+              placeholder= "category" 
+              placeholderTextColor= 'red'
+              onChangeText={
+                text => this.setState({ expenseCategory: text })
+              }
+            /> */}
+            <RNPickerSelect
+              style = { pickerStyle }
+              items = { this.dropdownItems }
+              value = { this.state.expenseCategory }
+              onValueChange = { value => this.setState({ expenseCategory: value }) }
+              useNativeAndroidPickerStyle = { false }
+              placeholder = { pickerPlaceholder }
+            />
+        </View>
       <View>
         <TouchableOpacity style={styles.button} onPress={ this.addItem }>
           <Text style={styles.buttonText} >Add</Text>
@@ -86,9 +90,20 @@ addItem = () => {
     category: this.state.expenseCategory
   }
   this.listData.push(listItem)
-  this.setState({expenseAmount:0})
+  this.setState({expenseAmount:0, expenseCategory: null})
+  this._textInput.clear()
+  this._textInput.focus()
 }
 
+const colors = {
+  primary : 'hsla(330, 38%, 65%, 1)'
+}
+
+const pickerPlaceholder = {
+  label: 'Select a category...',
+  value: null,
+  color: 'black'
+}
 
 const styles = StyleSheet.create({
   main: {
@@ -103,10 +118,26 @@ const styles = StyleSheet.create({
   },
   button: {
     padding: 15,
-    backgroundColor: 'black'
+    backgroundColor: colors.primary
   },
   buttonText: {
     color: 'white',
     textAlign: 'center'
+  },
+
+})
+
+const pickerStyle = StyleSheet.create({
+  inputIOS: {
+    padding: 10,
+    margin: 5,
+    borderColor: colors.primary,
+    borderWidth: 1,
+  },
+  inputAndroid: {
+    padding: 10,
+    margin: 5,
+    borderColor: colors.primary,
+    borderWidth: 1,    
   }
 })
