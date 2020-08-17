@@ -25,7 +25,7 @@ export default class App extends Component {
 
   render() {
     return (
-      <SafeAreaView >
+      <SafeAreaView style={{flex: 1}}>
         <View style={styles.main}>
         <Text>Add your expense</Text>
         <TextInput 
@@ -62,13 +62,14 @@ export default class App extends Component {
             <Text style={styles.buttonText} >Add</Text>
           </TouchableOpacity>
         </View>
-        
-        <FlatList 
-          data = {this.listData}
-          renderItem = { this.renderList }
-          keyExtractor = { item => item.id }
-          extraData = {this.state.expenseAmount}
-        />
+        <View style={{flex: 1}}>
+          <FlatList 
+            data = {this.listData}
+            renderItem = { this.renderList }
+            keyExtractor = { item => item.id }
+            extraData = {this.state.expenseAmount}
+          />
+        </View>       
       </SafeAreaView>
     )
   }
@@ -89,7 +90,13 @@ export default class App extends Component {
       category: this.state.expenseCategory
     }
     this.listData.push(listItem)
-    this.setState({expenseAmount:0, expenseCategory: null, validInput: false })
+    // Sort list in descending order
+    this.sortList()
+    this.setState({
+      expenseAmount:0, 
+      expenseCategory: null, 
+      validInput: false 
+    })
     this._textInput.clear()
     this._textInput.focus()
   }
@@ -98,6 +105,12 @@ export default class App extends Component {
     if( this.state.expenseAmount > 0 && this.state.expenseCategory ) {
       this.setState({validInput:true})
     }
+  }
+
+  sortList = () => {
+    this.listData.sort( (item1, item2) => {
+      return item2.id - item1.id
+    })
   }
 }
 
