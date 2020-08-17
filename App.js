@@ -99,6 +99,7 @@ export default class App extends Component {
         this.listData.splice( index, 1 )
       }
     })
+    this.showToast('Item Deleted!', 2000)
     this.saveList()
     this.setState({expenseAmount: 0})
   }
@@ -127,6 +128,7 @@ export default class App extends Component {
     })
     this._textInput.clear()
     this._textInput.focus()
+    this.showToast('Item Added!', 1500)
   }
 
   validate = () => {
@@ -164,8 +166,11 @@ export default class App extends Component {
     }
   }
 
-  showToast = () => {
-    this.setState({ showToast: true })
+  showToast = (message, duration) => {
+    this.setState({ 
+      message: message }, 
+      () => { this.setState({ showToast: true }) }
+    )
     const timer = setTimeout( 
       () => {this.setState({showToast: false})}, 
       3000
