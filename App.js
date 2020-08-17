@@ -11,6 +11,7 @@ export default class App extends Component {
     expenseAmount : 0,
     expenseCategory: '',
     validInput: false,
+    showToast: false,
   }
   
   listData = []
@@ -25,7 +26,7 @@ export default class App extends Component {
 
   render() {
     return (
-      <SafeAreaView style={{flex: 1}}>
+      <SafeAreaView style={{flex: 1, position: 'relative'}}>
         <View style={styles.main}>
         <Text>Add your expense</Text>
         <TextInput 
@@ -61,6 +62,11 @@ export default class App extends Component {
           >
             <Text style={styles.buttonText} >Add</Text>
           </TouchableOpacity>
+        </View>
+        <View style={[{
+          display: this.state.showToast ? 'flex' : 'none'
+        }, styles.toast]}>
+          <Text style={ styles.toastMessage }>Item Deleted!</Text>
         </View>
         <View style={{flex: 1}}>
           <FlatList 
@@ -157,6 +163,14 @@ export default class App extends Component {
       console.log(error)
     }
   }
+
+  showToast = () => {
+    this.setState({ showToast: true })
+    const timer = setTimeout( 
+      () => {this.setState({showToast: false})}, 
+      3000
+    )
+  }
 }
 
 const colors = {
@@ -193,6 +207,19 @@ const styles = StyleSheet.create({
     backgroundColor: colors.primaryDisabled,
     marginVertical: 15,
   },
+  toast: {
+    position: 'absolute',
+    backgroundColor: 'black',
+    bottom: 20,
+    left: 20,
+    right: 20,
+    padding: 5,
+    borderRadius: 5,  
+  },
+  toastMessage: {
+    color: 'white',
+    textAlign: 'center',
+  }
 })
 
 const pickerStyle = StyleSheet.create({
