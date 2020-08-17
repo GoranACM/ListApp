@@ -149,7 +149,9 @@ export default class App extends Component {
   loadList = async () => {
     try {
       let items = await AsyncStorage.getItem('data')
-      this.listData = JSON.parse( items )
+      if (JSON.parse(items)) {
+        this.listData = JSON.parse( items )
+      }
       this.setState({expenseAmount: 0})
     } catch (error) {
       console.log(error)
