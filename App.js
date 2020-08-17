@@ -74,8 +74,23 @@ export default class App extends Component {
     )
   }
   renderList = ({item}) => (
-    <Item amount={item.amount} category={item.category} />
+    <Item 
+      amount={ item.amount } 
+      category={ item.category } 
+      id={ item.id }
+      delete={ this.removeItem }
+    />
   )
+
+  removeItem = (itemId) => {
+    this.listData.forEach( (item, index) => {
+      if (item.id == itemId) {
+        this.listData.splice( index, 1 )
+      }
+    })
+    this.setState({expenseAmount: 0})
+  }
+
   addItem = () => {
     if( 
       isNaN(this.state.expenseAmount) || 
